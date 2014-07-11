@@ -24,9 +24,14 @@ class MainHandler(webapp2.RequestHandler):
 
 class JollyHandler(MainHandler):
     def get(self, jolly):
-        self.write("Hello World | let's get started")
+        self.redirect("/index")
 
+class IndexHandler(MainHandler):
+    def get (self):
+        self.renderPage("index.html")
+        
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([
+    (r"/index", IndexHandler),
     (PAGE_RE, JollyHandler),
             ])

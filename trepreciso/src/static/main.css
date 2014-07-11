@@ -1,0 +1,14 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	font-family:'Open Sans','Sans Serif',Verdana;
+}
+
+h1 {
+	font-size: 1.5em;
+	color: Navy;
+}
+
+canvas {
+/* 	border: 1px solid black; */
+	background-color: WhiteSmoke
