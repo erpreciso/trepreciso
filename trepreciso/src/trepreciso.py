@@ -26,12 +26,20 @@ class JollyHandler(MainHandler):
     def get(self, jolly):
         self.redirect("/index")
 
-class IndexHandler(MainHandler):
-    def get (self):
-        self.renderPage("index.html")
+class AllHandler(MainHandler):
+    def get (self, request):
+        templates = ["home", "contacts", "mywork"]
+        if request in templates:
+            template = request
+        else:
+            template = "home"
+        return self.renderPage(template + ".html", page=template)
         
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([
-    (r"/index", IndexHandler),
+    webapp2.Route(
+        r'/<request>',
+        handler=AllHandler,
+        name="all"),
     (PAGE_RE, JollyHandler),
             ])
