@@ -2,31 +2,38 @@
 <html>
 <head>
  <meta charset="UTF-8" />
- <title>StefanoMerlo|TheWebsite</title>
- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ <script src="/static/jquery-1.11.0.js"></script>
+ {% block title %}{% endblock %}
+ {% block scripts %}{% endblock %}
+ {% block style %}{% endblock %}
  <link href='/static/main.css' rel='stylesheet' type='text/css'>
  <script src='/static/main.js'></script>
 </head>
 <body>
  <h1>Stefano Merlo</h1>
  <!-- <div id="subtitle">Ciò che non è donato è perduto</div> -->
-<!--  <div><canvas id="randomball" width="300" height="100"></canvas></div>
- <div><canvas id="movesquare" width="300" height="100"></canvas></div>
+<!--  
+ 
  <div><canvas id="signature" width="400" height="40"></canvas></div> -->
  
  <ol id="TOC">
   <li id="home"{% if page == "home" %} class="current"{% endif %}>
-   <a href="/home">Home<br>[keyboard shortcut: h]</a>
+   <a href="/home">Home<div>[keyboard shortcut: h]</div></a>
   </li>
   <li id="contacts"{% if page == "contacts" %} class="current"{% endif %}>
-   <a href="/contacts">Contact me<br>[keyboard shortcut: c]</a>
+   <a href="/contacts">Contact me<div>[keyboard shortcut: c]</div></a>
   </li>
-  <li id="mywork"{% if page == "mywork" %} class="current"{% endif %}>
-   <a href="mywork">My work<br>[keyboard shortcut: w]</a>
+  <li id="bouncingball"{% if page == "bouncingball" %} class="current"{% endif %}>
+   <a href="/bouncingball">Bouncing Ball<div>[keyboard shortcut: b]</div></a>
+  </li>
+  <li id="movebrick"{% if page == "movebrick" %} class="current"{% endif %}>
+   <a href="/movebrick">Move the Brick<div>[keyboard shortcut: m]</div></a>
+  </li>
+  <li id="distancespider"{% if page == "distancespider" %} class="current"{% endif %}>
+   <a href="/distancespider">Distance Spider<div>[keyboard shortcut: s]</div></a>
   </li>
  </ol>
  <div class="content">{% block content %}{% endblock %}</div>
- 
  
 </body>
 </html>
