@@ -2,6 +2,14 @@
 $(document).ready(init);
 
 function init(){
+	shortcuts();
+	$("input").focus(function(){
+		$(document).off();
+	})
+	$("input").focusout(shortcuts);
+}
+
+function shortcuts(){
 	$(document).keydown(function(event){
 		console.log("key:"+event.which);
 		href = window.location.href;
@@ -19,11 +27,11 @@ function init(){
 			window.location.href = url + "/movebrick";
 		}
 		else if (event.which == 83){
-			window.location.href = url + "/spider";
+			window.location.href = url + "/distancespider";
 		}
 	});
+	
 }
-
 function drawSignature () {
 	var canvas = document.getElementById("signature");
 	var ctx = canvas.getContext('2d');
