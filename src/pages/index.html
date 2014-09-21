@@ -2,12 +2,10 @@
 <html>
 <head>
  <meta charset="UTF-8" />
- <script src="/static/jquery-1.11.0.js"></script>
- {% block title %}{% endblock %}
- {% block scripts %}{% endblock %}
- {% block style %}{% endblock %}
+ <script src="/static/jquery-1.11.1.min.js"></script>
  <link href='/static/main.css' rel='stylesheet' type='text/css'>
  <script src='/static/main.js'></script>
+ <title>StefanoMerlo|{{title}}</title>
 </head>
 <body>
  <h1>Stefano Merlo</h1>
@@ -32,8 +30,12 @@
   <li id="distancespider"{% if page == "distancespider" %} class="current"{% endif %}>
    <a href="/distancespider">Distance Spider<div>[keyboard shortcut: s]</div></a>
   </li>
- </ol>
- <div class="content">{% block content %}{% endblock %}</div>
+  <li id="chat"{% if page == "chat" %} class="current"{% endif %}>
+   <a href="/chat">Chat<div></div></a>
+  </li></ol>
+ <div class="content">
+  <div><canvas id="canvas" width="300" height="100"></canvas></div>
+ </div>
  
 </body>
 </html>
