@@ -9,7 +9,7 @@ var distance;
 
 
 function create_map(event) {
-	var triggered = $(event.target).attr('id');
+    var triggered = $(event.target).attr('id');
     var display_map = false;
     if (triggered == "display_default_map") {
         set_mapcenter_from_values(46.2, 11.2);
