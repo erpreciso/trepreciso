@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta charset="UTF-8" />
- <script src="/static/jquery-1.11.1.min.js"></script>
+ <script src="/static/jquery.min.js"></script>
  <link href='/static/main.css' rel='stylesheet' type='text/css'>
  <script src='/static/main.js'></script>
  <title>StefanoMerlo|{{title}}</title>
@@ -24,6 +24,9 @@
   <li id="bouncingball"{% if page == "bouncingball" %} class="current"{% endif %}>
    <a href="/bouncingball">Bouncing Ball<div>[keyboard shortcut: b]</div></a>
   </li>
+  <li id="gravity"{% if page == "gravity" %} class="current"{% endif %}>
+   <a href="/gravity">Gravity<div>[keyboard shortcut: g]</div></a>
+  </li>
   <li id="movebrick"{% if page == "movebrick" %} class="current"{% endif %}>
    <a href="/movebrick">Move the Brick<div>[keyboard shortcut: m]</div></a>
   </li>
@@ -34,7 +37,7 @@
    <a href="/chat">Chat<div></div></a>
   </li></ol>
  <div class="content">
-  <div><canvas id="canvas" width="300" height="100"></canvas></div>
+  <div><canvas id="canvas" width="900" height="600"></canvas></div>
  </div>
  
 </body>

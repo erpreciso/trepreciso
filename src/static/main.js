@@ -13,11 +13,106 @@ function init(){
 	else if (action == "contacts"){
 	    writecontacts();
 	}
+	else if (action == "gravity"){
+		gravity();
+	}
 	shortcuts();
 	$("input").focus(function(){
 		$(document).off();
 	})
 	$("input").focusout(shortcuts);
+}
+
+function gravity(){
+    var objects = new Array();
+    var canvas = document.getElementById("canvas");
+    var ground = {y: 300} // y-coord from the top
+    var now = Date.now();
+    var ball = {
+	x: 100,
+	y: 10,
+	vx: .05,
+	vy: 0,
+	ax: 0,
+	ay: 100, // pixel per second
+	time: now,
+	color: "red"
+    };
+    var ball2 = {
+	x: 10,
+	y: 10,
+	vx: 0,
+	vy: 0,
+	ax: 0,
+	ay: 0,
+	time: now,
+	color: "blue"
+    };
+    objects.push(ball);
+    objects.push(ball2);
+    animate();
+    function animate() {
+	reqAnimFrame = window.requestAnimationFrame ||
+		window.mozRequestAnimationFrame ||
+		window.webkitRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		window.oRequestAnimationFrame;
+	reqAnimFrame(animate);
+	move(objects, Date.now());
+	draw(objects);
+    }
+    function move(objs, time){
+	for (var i = 0; i < objs.length; i++) {
+	    var obj = objs[i];
+	    var telapsed = (time - obj.time)/1000; // time in seconds
+	    if (telapsed > 0) {
+		var vfx = obj.vx + obj.ax*telapsed;
+		var vfy = obj.vy + obj.ay*telapsed;
+		var yDisplacement = obj.vy*telapsed + 0.5*obj.ay*Math.pow(telapsed, 2);
+		var xDisplacement = obj.vx*telapsed + 0.5*obj.ax*Math.pow(telapsed, 2);
+		if (obj.y + yDisplacement >= ground.y && obj.vy > 0){
+		    var gap = obj.y + yDisplacement - ground.y;
+		    var vfynew = Math.sqrt(Math.pow(obj.vy,2)+2*obj.ay*(yDisplacement-gap));
+		    var timedown = 2*(yDisplacement-gap)/(obj.vy+vfynew);
+		    var timeup = telapsed - timedown;
+		    var yDisplacementFromGround = vfynew*timeup+0.5*obj.ay*Math.pow(timeup,2);
+		    obj.y = ground.y - yDisplacementFromGround;
+		    obj.vy = -vfynew + obj.ay*timeup;
+
+		}
+		else {
+		    obj.y += yDisplacement;
+		    obj.vy = vfy;
+		}
+		obj.x += xDisplacement;
+		obj.vx = vfx;
+		obj.time = time;
+	    }
+	    else {
+		// do nothing
+	    }
+	}
+    }
+    function draw (objs) {
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	for (var i = 0; i < objs.length; i++) {
+	    var what = objs[i];
+	    ctx.fillStyle = what.color;
+	    drawArc(ctx, what.x, what.y, 10);
+	}
+    }
+    function drawArc(context,xCenter, yCenter,radius){
+	context.beginPath();
+	context.arc(xCenter, yCenter, radius, 0, Math.PI*2,false);
+	context.fill();
+    };
+    function drawGraph(obj){
+	var ctx = canvas.getContext("2d");
+	ctx.fillRect(graphx,100+obj.vy*100,1,1);
+	ctx.fillRect(graphx,(obj.y+300)/10,1,1);
+	graphx +=.05;
+    }
 }
 
 function writecontacts(){
@@ -55,9 +150,13 @@ function shortcuts(){
 		else if (event.which == 83){
 			window.location.href = url + "/distancespider";
 		}
+		else if (event.which == 71){
+			window.location.href = url + "/gravity";
+		}
 	});
 	
 }
+
 function drawSignature () {
 	var canvas = document.getElementById("signature");
 	var ctx = canvas.getContext('2d');
@@ -67,6 +166,7 @@ function drawSignature () {
 	ctx.fillStyle = "#888";
 	ctx.fillText("email: trepreciso@gmail.com", 40, 35);
 }
+
 
 function drawGrid(ctx, granularity){
 	// draw a grid providing the granularity and the context.
@@ -85,6 +185,7 @@ function drawGrid(ctx, granularity){
 	ctx.fillStyle = "red"
 	ctx.fillRect(10,10,10,10);
 }
+
 
     function bouncinganimation(){
 	    var ballcanvas = document.getElementById("canvas");
@@ -135,7 +236,7 @@ function drawGrid(ctx, granularity){
 	    }
 	    function draw(color) {
 		    var ctx = canvas.getContext('2d');
-		    ctx.clearRect(0, 0, 420, 270);
+		    ctx.clearRect(0, 0, canvas.width, canvas.height);
 		    ctx.fillStyle = color;
 		    drawArc(ctx, x, y, radius);
 	    }
