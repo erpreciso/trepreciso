@@ -30,7 +30,6 @@ class JollyHandler(webapp2.RequestHandler):
 
 class PageHandler(MainHandler):     
     def get(self, action):
-        logging.info(action)
         return self.renderPage("index.html", page=action)
 
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
