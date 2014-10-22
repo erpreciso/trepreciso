@@ -2,7 +2,11 @@
 <html>
 <head>
  <meta charset="UTF-8" />
+{% if dev_workflow_status == "production" %}
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+{% else %}
  <script src="/static/jquery.min.js"></script>
+{% endif %}
  <link href='/static/main.css' rel='stylesheet' type='text/css'>
  <script src='/static/main.js'></script>
  <title>StefanoMerlo|{{title}}</title>
@@ -37,6 +41,13 @@
    <a href="/chat">Chat<div></div></a>
   </li></ol>
  <div class="content">
+  <div id="canvas_size">
+    <label for="canvas_width">Type here canvas width</label>
+    <input id="canvas_width" />
+    <label for="canvas_height">Type here canvas height</label>
+    <input id="canvas_height" />
+    <button id="resize_canvas">Go</button>
+  </div>
   <div><canvas id="canvas" width="600" height="400"></canvas></div>
  </div>
  

@@ -27,6 +27,14 @@ function init(){
 	$(document).off();
     })
     $("input").focusout(shortcuts);
+    $("#canvas_width").val($("#canvas").width());
+    $("#canvas_height").val($("#canvas").height());
+    $("#resize_canvas").on("click", function(){
+	    var w = $("#canvas_width").val();
+	    var h = $("#canvas_height").val();
+	    $("#canvas").width(w);
+	    $("#canvas").height(h);
+	    });
 }
 
 function Ball () {
@@ -51,10 +59,11 @@ function Universe(){
 function defineWorld(){
     // return an object world with ground, left and right bounds
     var world = new Object();
-    world.ground = 300;
-    world.left = 5;
-    world.right = 400;
-    world.gravity = 5000;
+    world.ground = $("#canvas").height() - 30;
+    world.roof = 30;
+    world.left = 30;
+    world.right = $("#canvas").width() - 30;
+    world.gravity = -500;
     return world;
 }
 
@@ -73,16 +82,22 @@ Universe.prototype = {
 	return r;
     },
     update: function() {
-	this.canvas.getContext("2d").clearRect(0,0,canvas.width,canvas.height);
+	var ctx = this.canvas.getContext("2d");
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	ctx.beginPath();
+	ctx.rect(0,this.world.ground,this.canvas.width,this.canvas.height-this.world.ground);
+	ctx.rect(this.world.right,0,this.canvas.width,this.canvas.height);
+	ctx.rect(0,0,this.world.left,this.canvas.height);
+	ctx.rect(0,0,this.canvas.width,this.world.roof);
+	ctx.fillStyle = "yellow";
+	ctx.fill();
 	var collision = [];
 	for (var i = 0; i < this.balls.length; i++) {
 	    var ball = this.balls[i];
 	    ball.move(this.time, this.world);
 	    for (var j = i + 1; j < this.balls.length; j++) {
 		var otherBall = this.balls[j];
-	       //if (otherBall.overlapX(ball.x+ball.radius) && otherBall.overlapY(ball.y+ball.radius)){
 		if (distance(ball.x,ball.y,otherBall.x,otherBall.y)<(ball.radius+otherBall.radius)){
-		       // COLLISION!!
 		   this.manageCollision([ball, otherBall]);
 		}
 		else {
@@ -166,6 +181,21 @@ Ball.prototype = {
 	    this.y = world.ground - yDisplFromGround;
 	    this.vy = -vfynew + aygrav*timeup;
 	}
+	// if it goes on the roof
+	else if (this.y + yDispl <= world.roof) {
+	    var gap = this.y + yDispl - world.roof;
+	    if (this.vy < 0) {
+		var vfynew = -Math.sqrt(Math.pow(this.vy,2)+2*aygrav*(yDispl-gap));
+            }
+	    else {
+		var vfynew = Math.sqrt(Math.pow(this.vy,2)+2*aygrav*(yDispl-gap));
+	    }
+	    var timeup = 2*(yDispl-gap)/(this.vy+vfynew);
+	    var timedown = timeElapsed - timeup;
+	    var yDisplFromRoof = vfynew*timedown + .5*aygrav*Math.pow(timedown,2);
+	    this.y = world.roof - yDisplFromRoof;
+	    this.vy = -vfynew + aygrav*timedown;
+	}
 	else
       	{
 	    this.y += yDispl;
@@ -190,7 +220,6 @@ Ball.prototype = {
 	    else {
 		var vfxnew = -Math.sqrt(Math.pow(this.vx,2)+2*this.ax*(xDispl-gap));
 	    }
-	    //console.log("vx:"+this.vx.toFixed(2)+", newvx: "+vfxnew.toFixed(2));
 	    var timeleft = 2*(xDispl-gap)/(this.vx+vfxnew);
 	    var timeright = timeElapsed - timeleft;
 	    var xDisplFromLeft = vfxnew*timeright + .5*this.ax*Math.pow(timeright,2);
@@ -219,7 +248,7 @@ function createObjects(){
     var ball = new Ball();
     ball.radius = 30;
     ball.x = 100;
-    ball.y = 10;
+    ball.y = 50;
     ball.vx = 20;
     ball.time = now;
     ball.mass = 20;
@@ -228,7 +257,8 @@ function createObjects(){
     var ball2 = new Ball();
     ball2.radius = 20;
     ball2.x = 200;
-    ball2.y = 10;
+    ball2.y = 50;
+    ball2.ax = -100;
     ball2.mass = 5;
     ball2.time = now;
     ball2.color = "blue";
@@ -238,7 +268,7 @@ function createObjects(){
     ball3.x = 300;
     ball3.y = 150;
     ball3.vx = 50;
-    ball3.mass = 500;
+    ball3.mass = 200;
     ball3.time = now;
     res.push(ball3);
     return res;
@@ -265,12 +295,6 @@ function gravity(){
 	reqAnimFrame(animate);
     }
     
-    function drawGraph(obj){
-	var ctx = canvas.getContext("2d");
-	ctx.fillRect(graphx,100+obj.vy*100,1,1);
-	ctx.fillRect(graphx,(obj.y+300)/10,1,1);
-	graphx +=.05;
-    }
 }
 
 function writecontacts(){

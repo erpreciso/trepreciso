@@ -3,6 +3,8 @@ version: 1
 runtime: python27
 api_version: 1
 threadsafe: yes
+env_variables:
+    DEV_WORKFLOW_STATUS: "dev" #production or development
 
 handlers:
 - url: /favicon.ico

@@ -30,7 +30,9 @@ class JollyHandler(webapp2.RequestHandler):
 
 class PageHandler(MainHandler):     
     def get(self, action):
-        return self.renderPage("index.html", page=action)
+        return self.renderPage("index.html",
+		page=action,
+		dev_workflow_status=os.environ["DEV_WORKFLOW_STATUS"])
 
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([
