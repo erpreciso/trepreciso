@@ -1,50 +1,101 @@
 <!DOCTYPE html>
 <html>
-<head>
- <meta charset="UTF-8" />
-{% if dev_workflow_status == "production" %}
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-{% else %}
- <script src="/static/jquery.min.js"></script>
-{% endif %}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcL3GY_81kL6edpJ6zRwEu5Qpy0DqhGUw&sensor=false"></script>
-
- <link href='/static/main.css' rel='stylesheet' type='text/css'>
- <script src='/static/main.js'></script>
- <title>StefanoMerlo|{{title}}</title>
-</head>
+    <head>
+	<meta charset="UTF-8" />
+	{% if dev_workflow_status == "production" %}
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	{% else %}
+	<script src="/static/jquery.min.js"></script>
+	{% endif %}
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAcL3GY_81kL6edpJ6zRwEu5Qpy0DqhGUw&sensor=false"></script>
+	<link href='/static/main.css' rel='stylesheet' type='text/css'>
+	<script src='/static/main.js'></script>
+	<title>StefanoMerlo|{{title}}</title>
+    </head>
 <body>
- <h1>Stefano Merlo</h1>
- <ol id="TOC">
-  <li id="gravity"{% if page == "gravity" %} class="current"{% endif %}>
-   <a href="/gravity">Gravity</a>
-  </li>
-  <li id="distancespider"{% if page == "distancespider" %} class="current"{% endif %}>
-   <a href="/distancespider">Distance Spider</a>
-  </li>
-  <li id="chat"{% if page == "chat" %} class="current"{% endif %}>
-   <a href="/chat">Chat</a>
-  </li>
- </ol>
- <div class="content">
-{% if page == "gravity" %}
-  <div id="canvas_box"><canvas id="canvas" height="600px" width="400px"></canvas></div>
-  <div id="parameters_box"></div>
-{% else %}
-<div id="user">
-        <button type="button" class="create_map" id="display_default_map">display the DEFAULT map</button>
-        <input type="text" id="user_lat" placeholder="enter latitude" />
-        <input type="text" id="user_lng" placeholder="enter longitude" />
-        <button type="button" class="create_map" id="display_coordinates_map">display the custom map based on the coordinates</button>
-        <input type="text" id="user_address" placeholder="enter address" />		
-		<button type="button" class="create_map" id="display_address_map">display the custom map based on the address</button>
-        <input type="text" id="user_direction_address_1" placeholder="enter first address" />
-        <input type="text" id="user_direction_address_2" placeholder="enter second address" />
-        <button type="button" class="create_map" id="display_directions_map">get directions</button>
+    <header>
+	<div id="title">
+	    <h1>erpreciso's apps</h1>
+	    <div id="blog_link">
+                <a href="http://erpreciso.me">erpreciso main website</a>
+            </div>
 	</div>
-	<div id="map-canvas"/>
-{% endif %}
- </div>
- 
+	<div id="subtitle">
+	    <h2>Think, Plan, Study, Do</h2>
+	</div>
+    </header>
+    <section>
+	<ol id="TOC">
+	    <li id="gravity"{% if page == "gravity" %} class="current"{% endif %}>
+		<a href="/gravity">Gravity</a>
+	    </li>
+	    <li id="distancespider"{% if page == "distancespider" %} class="current"{% endif %}>
+		<a href="/distancespider">Distance Spider</a>
+	    </li>
+	    <li id="chat"{% if page == "chat" %} class="current"{% endif %}>
+		<a href="/chat">Chat</a>
+	    </li>
+	</ol>
+	<div id="content">
+	    {% if page == "gravity" %}
+	    <div id="canvas_box">
+		<canvas id="canvas" width="600" height="400"></canvas>
+	    </div>
+	    <div id="parameters_box">
+		<div id="canvas_size_params">
+		    <h3>Canvas size parameters</h3>
+		    <label for="canvas_width">Width</label>
+		    <input id="canvas_width" size="3"/>
+		    <label for="canvas_height">Height</label>
+		    <input id="canvas_height" size="3"/>
+		</div>
+		<div id="universe_params">
+		    <h3>Universe parameters</h3>
+                    <label for="new_ball_color">New ball color</label>
+		    <input id="new_ball_color" size="10" value="green"/>
+                    <label for="new_ball_radius">New ball radius</label>
+		    <input id="new_ball_radius" size="10" value="5" />
+                    <label for="new_ball_mass">New ball mass</label>
+		    <input id="new_ball_mass" size="10" value="50" />
+		    <div id="new_ball_position">
+			<h3>New ball position</h3>
+			<label for="new_x">X</label>
+			<input size="3" id="new_x" value="0"/>
+			<label for="new_y">Y</label>
+			<input size="3" id="new_y" value="0"/>
+		    </div>
+		    <div id="new_ball_velocity">
+			<h3>New ball velocities</h3>
+			<label for="new_vx">vX</label>
+			<input size="3" id="new_vx" value="0" />
+			<label for="new_vy">vY</label>
+			<input size="3" id="new_vy" value="0" />
+		    </div>
+		    <div id="new_ball_acceleration">
+			<h3>New ball accelerations</h3>
+			<label for="new_ax">aX</label>
+			<input size="3" id="new_ax" value="5" />
+			<label for="new_ay">aY</label>
+			<input size="3" id="new_ay" value="5" />
+		    </div>
+		</div>
+		<button id="add_ball">Add this ball</button>
+            </div>
+	    {% else %}
+	    <div id="map-canvas"/>
+	    <div id="user_input">
+		<button type="button" class="create_map" id="display_default_map">display the DEFAULT map</button>
+		<input type="text" id="user_lat" placeholder="enter latitude" />
+		<input type="text" id="user_lng" placeholder="enter longitude" />
+		<button type="button" class="create_map" id="display_coordinates_map">display the custom map based on the coordinates</button>
+		<input type="text" id="user_address" placeholder="enter address" />		
+		<button type="button" class="create_map" id="display_address_map">display the custom map based on the address</button>
+		<input type="text" id="user_direction_address_1" placeholder="enter first address" />
+		<input type="text" id="user_direction_address_2" placeholder="enter second address" />
+		<button type="button" class="create_map" id="display_directions_map">get directions</button>
+	    </div>
+	    {% endif %}
+	</div>
+    </section>
 </body>
 </html>

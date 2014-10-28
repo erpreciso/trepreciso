@@ -110,37 +110,20 @@ function gravity(){
 	    ctx.fill();
 	}
     };
-    function createObjects(){
-	// return list off balls
-	var res = [];
-	var now = Date.now();
+    function createBall(){
 	var ball = new Ball();
-	ball.radius = 30;
-	ball.x = 100;
-	ball.y = 50;
-	ball.vx = 20;
-	ball.time = now;
-	ball.mass = 20;
-	ball.color =  "red";
-	res.push(ball);
-	var ball2 = new Ball();
-	ball2.radius = 20;
-	ball2.x = 200;
-	ball2.y = 50;
-	ball2.ax = -100;
-	ball2.mass = 5;
-	ball2.time = now;
-	ball2.color = "blue";
-	res.push(ball2);
-	var ball3 = new Ball();
-	ball3.radius = 5;
-	ball3.x = 300;
-	ball3.y = 150;
-	ball3.vx = 50;
-	ball3.mass = 200;
-	ball3.time = now;
-	res.push(ball3);
-	return res;
+	ball.radius = parseInt($("#new_ball_radius").val(), 10);
+	ball.ax = parseInt($("#new_ax").val(), 10);
+	ball.ay = parseInt($("#new_ay").val(), 10);
+	ball.x = parseInt($("#new_x").val(), 10);
+	ball.y = parseInt($("#new_y").val(), 10);
+	ball.vx = parseInt($("#new_vx").val(), 10);
+	ball.vy = parseInt($("#new_vy").val(), 10);
+	ball.time = Date.now();
+	ball.mass = parseInt($("#new_ball_mass").val(), 10);
+	ball.color = $("#new_ball_color").val();
+	console.log(ball);
+	return ball;
     }
     function Universe(){
 	// define Universe object
@@ -148,17 +131,14 @@ function gravity(){
 	this.time = 0;
 	this.world = null;
     }
-    function defineWorld(){
-	// return an object world with ground, left and right bounds
-	var world = new Object();
-	world.ground = $("#canvas").height() - 10;
-	world.roof = 10;
-	world.left = 10;
-	world.right = $("#canvas").width() - 10;
-	world.gravity = -500;
-	return world;
+    function World(){
+	// define object world with ground, left and right bounds
+	this.ground = $("#canvas").height() - 10;
+	this.roof = 10;
+	this.left = 10;
+	this.right = $("#canvas").width() - 10;
+	this.gravity = -500;
     }
-    function distance(x1,y1,x2,y2){return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));}
     Universe.prototype = {
 	// define Universe methods
 	setCanvas: function (canvas){ this.canvas = canvas;},
@@ -173,6 +153,7 @@ function gravity(){
 	    return r;
 	},
 	update: function() {
+	    function distance(x1,y1,x2,y2){return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));}
 	    var ctx = this.canvas.getContext("2d");
 	    ctx.clearRect(0,0,canvas.width,canvas.height);
 	    ctx.beginPath();
@@ -244,14 +225,36 @@ function gravity(){
 	    b2.vy = newb2vy;
 	},
     }
-    var canvas = document.getElementById("canvas");
-    var universe = new Universe();
-    var objs = createObjects();
-    for (var i = 0; i < objs.length; i++){
-	universe.addBall(objs[i]);
+    function initializeDefaultUniverse(){
+	var universe = new Universe();
+	var now = Date.now();
+	var ball = new Ball();
+	ball.radius = 30;
+	ball.x = 100;
+	ball.y = 50;
+	ball.vx = 20;
+	ball.time = now;
+	ball.mass = 20;
+	ball.color =  "red";
+	universe.addBall(ball);
+	var ball2 = new Ball();
+	ball2.radius = 20;
+	ball2.x = 200;
+	ball2.y = 50;
+	ball2.ax = -1000;
+	ball2.mass = 5;
+	ball2.time = now;
+	ball2.color = "blue";
+	universe.addBall(ball2);
+	var canvas = document.getElementById("canvas");
+	universe.setCanvas(canvas);
+	universe.setWorld(new World());
+	return universe;
     }
-    universe.setCanvas(canvas);
-    universe.setWorld(defineWorld());
+    var universe = initializeDefaultUniverse();
+    $("#add_ball").on("click",function(){
+	universe.addBall(createBall());
+    });
     animate();
     function animate() {
 	reqAnimFrame = window.requestAnimationFrame ||
@@ -277,6 +280,7 @@ var distancespider = {
 	var triggered = $(event.target).attr('id');
 	var display_map = false;
 	if (triggered == "display_default_map") {
+            console.log("Default map trigg");
 	    distancespider.set_mapcenter_from_values(46.2, 11.2);
 	    display_map = true;
 	}
