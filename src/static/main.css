@@ -99,12 +99,16 @@ section {
 	margin:.5em;
     }
     
+	#parameters_box ol {
+	    list-style-type: none;
+	}
+
 	#parameters_box h3 {
 	    font-size:1em;
 	    font-color:Navy;
 	}
 
-	#parameters_box div {
+	#new_ball_color,#new_ball_radius,#new_ball_mass {
 	    clear:both;
 	}
 
@@ -114,7 +118,6 @@ section {
 	}
 
 	#parameters_box input {
-	    float:left;
 	    height: 1em;
 	}
  
